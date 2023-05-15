@@ -306,8 +306,8 @@ auto main(int argc, char** argv) -> int
             double nmseTest {};
             double mseTrain {};
             double mseTest {};
-            double mreTrain {};
-            double mreTest {};
+            double mreeTrain {};
+            double mreeTest {};
 
             auto scaleTrain = taskflow.emplace([&]() {
                 Eigen::Map<Eigen::Array<Operon::Scalar, -1, 1>> estimated(estimatedTrain.data(), std::ssize(estimatedTrain));
@@ -326,8 +326,8 @@ auto main(int argc, char** argv) -> int
                 mseTrain = Operon::MSE {}(estimatedTrain, targetTrain);
                 mseTest = Operon::MSE {}(estimatedTest, targetTest);
 
-                mreTrain = Operon::MRE {}(estimatedTrain, targetTrain);
-                mreTest = Operon::MRE {}(estimatedTest, targetTest);
+                mreeTrain = Operon::MREE {}(estimatedTrain, targetTrain);
+                mreeTest = Operon::MREE {}(estimatedTest, targetTest);
             });
 
             double avgLength = 0;
@@ -361,8 +361,8 @@ auto main(int argc, char** argv) -> int
                 T{ "nmse_te", nmseTest, format },
                 T{ "mse_tr", mseTrain, format },
                 T{ "mse_te", mseTest, format },
-                T{ "mre_tr", mreTrain, format },
-                T{ "mre_te", mreTest, format },
+                T{ "mree_tr", mreeTrain, format },
+                T{ "mree_te", mreeTest, format },
                 T{ "avg_fit", avgQuality, format },
                 T{ "avg_len", avgLength, format },
                 T{ "eval_cnt", evaluator.CallCount , ":>" },

@@ -57,14 +57,14 @@ namespace Operon {
         return NormalizedMeanSquaredError(beg1, end1, beg2);
     }
 
-    auto MRE::operator()(Operon::Span<Operon::Scalar const> estimated, Operon::Span<Operon::Scalar const> target) const noexcept -> double
+    auto MREE::operator()(Operon::Span<Operon::Scalar const> estimated, Operon::Span<Operon::Scalar const> target) const noexcept -> double
     {
-        return MeanRelativeError(estimated.begin(), estimated.end(), target.begin());
+        return MeanRelativeExponentError(estimated.begin(), estimated.end(), target.begin());
     }
 
-    auto MRE::operator()(Iterator beg1, Iterator end1, Iterator beg2) const noexcept -> double
+    auto MREE::operator()(Iterator beg1, Iterator end1, Iterator beg2) const noexcept -> double
     {
-        return MeanRelativeError(beg1, end1, beg2);
+        return MeanRelativeExponentError(beg1, end1, beg2);
     }
 
     auto MAE::operator()(Operon::Span<Operon::Scalar const> estimated, Operon::Span<Operon::Scalar const> target) const noexcept -> double

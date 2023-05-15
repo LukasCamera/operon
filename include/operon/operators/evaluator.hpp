@@ -47,7 +47,7 @@ struct OPERON_EXPORT NMSE : public ErrorMetric {
     auto operator()(Iterator beg1, Iterator end1, Iterator beg2) const noexcept -> double override;
 };
 
-struct OPERON_EXPORT MRE : public ErrorMetric {
+struct OPERON_EXPORT MREE : public ErrorMetric {
     auto operator()(Operon::Span<Operon::Scalar const> estimated, Operon::Span<Operon::Scalar const> target) const noexcept -> double override;
     auto operator()(Iterator beg1, Iterator end1, Iterator beg2) const noexcept -> double override;
 };
