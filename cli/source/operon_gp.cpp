@@ -302,12 +302,12 @@ auto main(int argc, char** argv) -> int
                 }
             });
 
-            double r2Train{};
-            double r2Test{};
-            double nmseTrain{};
-            double nmseTest{};
-            double maeTrain{};
-            double maeTest{};
+            double nmseTrain {};
+            double nmseTest {};
+            double mseTrain {};
+            double mseTest {};
+            double mreTrain {};
+            double mreTest {};
 
             auto scaleTrain = taskflow.emplace([&]() {
                 Eigen::Map<Eigen::Array<Operon::Scalar, -1, 1>> estimated(estimatedTrain.data(), std::ssize(estimatedTrain));
@@ -320,15 +320,14 @@ auto main(int argc, char** argv) -> int
             });
 
             auto calcStats = taskflow.emplace([&]() {
-                // negate the R2 because this is an internal fitness measure (minimization) which we here repurpose
-                r2Train = -Operon::R2{}(estimatedTrain, targetTrain);
-                r2Test = -Operon::R2{}(estimatedTest, targetTest);
+                nmseTrain = Operon::NMSE {}(estimatedTrain, targetTrain);
+                nmseTest = Operon::NMSE {}(estimatedTest, targetTest);
 
-                nmseTrain = Operon::NMSE{}(estimatedTrain, targetTrain);
-                nmseTest = Operon::NMSE{}(estimatedTest, targetTest);
+                mseTrain = Operon::MSE {}(estimatedTrain, targetTrain);
+                mseTest = Operon::MSE {}(estimatedTest, targetTest);
 
-                maeTrain = Operon::MAE{}(estimatedTrain, targetTrain);
-                maeTest = Operon::MAE{}(estimatedTest, targetTest);
+                mreTrain = Operon::MRE {}(estimatedTrain, targetTrain);
+                mreTest = Operon::MRE {}(estimatedTest, targetTest);
             });
 
             double avgLength = 0;
@@ -358,19 +357,15 @@ auto main(int argc, char** argv) -> int
             auto const* format = ":>#8.3g";
             std::array stats {
                 T{ "iteration", gp.Generation(), ":>" },
-                T{ "r2_tr", r2Train, format },
-                T{ "r2_te", r2Test, format },
-                T{ "mae_tr", maeTrain, format },
-                T{ "mae_te", maeTest, format },
                 T{ "nmse_tr", nmseTrain, format },
                 T{ "nmse_te", nmseTest, format },
+                T{ "mse_tr", mseTrain, format },
+                T{ "mse_te", mseTest, format },
+                T{ "mre_tr", mreTrain, format },
+                T{ "mre_te", mreTest, format },
                 T{ "avg_fit", avgQuality, format },
                 T{ "avg_len", avgLength, format },
                 T{ "eval_cnt", evaluator.CallCount , ":>" },
-                T{ "res_eval", evaluator.ResidualEvaluations, ":>" },
-                T{ "jac_eval", evaluator.JacobianEvaluations, ":>" },
-                T{ "opt_time", evaluator.CostFunctionTime,    ":>" },
-                T{ "seed", config.Seed, ":>" },
                 T{ "elapsed", elapsed, ":>"},
             };
             Operon::PrintStats({ stats.begin(), stats.end() }, gp.Generation() == 0);

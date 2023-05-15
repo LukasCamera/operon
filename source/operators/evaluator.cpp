@@ -6,6 +6,7 @@
 #include "operon/error_metrics/correlation_coefficient.hpp"
 #include "operon/error_metrics/mean_absolute_error.hpp"
 #include "operon/error_metrics/mean_squared_error.hpp"
+#include "operon/error_metrics/mean_relative_error.hpp"
 #include "operon/error_metrics/normalized_mean_squared_error.hpp"
 #include "operon/error_metrics/r2_score.hpp"
 #include "operon/operators/evaluator.hpp"
@@ -54,6 +55,16 @@ namespace Operon {
     auto NMSE::operator()(Iterator beg1, Iterator end1, Iterator beg2) const noexcept -> double
     {
         return NormalizedMeanSquaredError(beg1, end1, beg2);
+    }
+
+    auto MRE::operator()(Operon::Span<Operon::Scalar const> estimated, Operon::Span<Operon::Scalar const> target) const noexcept -> double
+    {
+        return MeanRelativeError(estimated.begin(), estimated.end(), target.begin());
+    }
+
+    auto MRE::operator()(Iterator beg1, Iterator end1, Iterator beg2) const noexcept -> double
+    {
+        return MeanRelativeError(beg1, end1, beg2);
     }
 
     auto MAE::operator()(Operon::Span<Operon::Scalar const> estimated, Operon::Span<Operon::Scalar const> target) const noexcept -> double
