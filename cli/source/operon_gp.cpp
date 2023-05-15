@@ -354,7 +354,7 @@ auto main(int argc, char** argv) -> int
             auto elapsed = static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count()) / 1e6;
 
             using T = std::tuple<std::string, double, std::string>;
-            auto const* format = ":>#8.3g";
+            auto const* format = ":>#10.2e";
             std::array stats {
                 T{ "iteration", gp.Generation(), ":>" },
                 T{ "nmse_tr", nmseTrain, format },
@@ -365,8 +365,8 @@ auto main(int argc, char** argv) -> int
                 T{ "mree_te", mreeTest, format },
                 T{ "avg_fit", avgQuality, format },
                 T{ "avg_len", avgLength, format },
-                T{ "eval_cnt", evaluator.CallCount , ":>" },
-                T{ "elapsed", elapsed, ":>"},
+                T{ "eval_cnt", evaluator.CallCount , ":>10" },
+                T{ "elapsed", elapsed, ":>10.0f"},
             };
             fmt::print("\n");
             fmt::print("{}\n", Operon::InfixFormatter::Format(best.Genotype, problem.GetDataset(), 6));
