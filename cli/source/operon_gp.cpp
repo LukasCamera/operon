@@ -368,6 +368,8 @@ auto main(int argc, char** argv) -> int
                 T{ "eval_cnt", evaluator.CallCount , ":>" },
                 T{ "elapsed", elapsed, ":>"},
             };
+            fmt::print("\n");
+            fmt::print("{}\n", Operon::InfixFormatter::Format(best.Genotype, problem.GetDataset(), 6));
             Operon::PrintStats({ stats.begin(), stats.end() }, gp.Generation() == 0);
         };
 
