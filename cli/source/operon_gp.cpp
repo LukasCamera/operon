@@ -357,20 +357,20 @@ auto main(int argc, char** argv) -> int
             auto const* format = ":>#10.2e";
             std::array stats {
                 T{ "iteration", gp.Generation(), ":>" },
+                T{ "mree_tr", mreeTrain, format },
+                T{ "mree_te", mreeTest, format },
                 T{ "nmse_tr", nmseTrain, format },
                 T{ "nmse_te", nmseTest, format },
                 T{ "mse_tr", mseTrain, format },
                 T{ "mse_te", mseTest, format },
-                T{ "mree_tr", mreeTrain, format },
-                T{ "mree_te", mreeTest, format },
                 T{ "avg_fit", avgQuality, format },
-                T{ "avg_len", avgLength, format },
+                T{ "avg_len", avgLength, ":>#10.2f" },
                 T{ "eval_cnt", evaluator.CallCount , ":>10" },
                 T{ "elapsed", elapsed, ":>10.0f"},
             };
             fmt::print("\n");
             fmt::print("{}\n", Operon::InfixFormatter::Format(best.Genotype, problem.GetDataset(), 6));
-            Operon::PrintStats({ stats.begin(), stats.end() }, gp.Generation() == 0);
+            Operon::PrintStats({ stats.begin(), stats.end() }, true);
         };
 
         gp.Run(executor, random, report);
