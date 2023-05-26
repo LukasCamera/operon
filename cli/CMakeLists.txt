@@ -24,7 +24,6 @@ function(add_operon_cli NAME)
     if(MSVC)
         target_compile_options(${NAME} PRIVATE "/std:c++latest")
     else()
-        target_compile_options(${NAME} PUBLIC "-march=knl;-mavx512f;-mavx512cd;-mavx512er;-mavx512pf;-mfma;-mno-vzeroupper")
         target_link_options(${NAME} PRIVATE "-Wl,--no-undefined")
     endif()
 
