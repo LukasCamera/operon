@@ -353,12 +353,15 @@ auto main(int argc, char** argv) -> int
             auto t1 = std::chrono::steady_clock::now();
             auto elapsed = static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count()) / 1e6;
 
+            auto best_length = best.Genotype.Length();
+
             using T = std::tuple<std::string, double, std::string>;
             auto const* format = ":>#10.2e";
             std::array stats {
                 T{ "iteration", gp.Generation(), ":>" },
                 T{ "mree_tr", mreeTrain, format },
                 T{ "mree_te", mreeTest, format },
+                T{ "length", best_length, ":>10" },
                 T{ "nmse_tr", nmseTrain, format },
                 T{ "nmse_te", nmseTest, format },
                 T{ "mse_tr", mseTrain, format },
