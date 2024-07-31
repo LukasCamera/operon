@@ -165,6 +165,7 @@ public:
         , dtable_(dtable)
         , error_(error)
         , scaling_(linearScaling)
+        , weights_(1, 1)
     {
     }
 
@@ -173,10 +174,14 @@ public:
     auto
     operator()(Operon::RandomGenerator& /*random*/, Individual& ind, Operon::Span<Operon::Scalar> buf) const -> typename EvaluatorBase::ReturnType override;
 
+    auto Weights() const { return std::span<Operon::Scalar const>{weights_}; }
+    auto SetWeights(std::vector<Operon::Scalar> weights) const { weights_ = std::move(weights); }
+
 private:
     std::reference_wrapper<DTable const> dtable_;
     ErrorMetric error_;
     bool scaling_{false};
+    mutable std::vector<Operon::Scalar> weights_;
 };
 
 class MultiEvaluator : public EvaluatorBase {

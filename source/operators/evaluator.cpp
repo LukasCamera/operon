@@ -65,7 +65,13 @@ namespace Operon {
                 std::transform(buf.begin(), buf.end(), buf.begin(), [a=a,b=b](auto x) { return a * x + b; });
             }
             ENSURE(buf.size() >= targetValues.size());
-            return error_(buf, targetValues);
+
+            if (Weights().size() == 1) {
+                return error_(buf, targetValues);
+            }
+
+            ENSURE(Weights().size() >= targetValues.size());
+            return error_(buf, targetValues, Weights());
         };
 
         auto fit = static_cast<Operon::Scalar>(computeFitness());
