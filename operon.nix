@@ -1,12 +1,18 @@
-{ stdenv, pkgs }:
-stdenv.mkDerivation {
+{ stdenv, pkgs, system }:
+stdenv.mkDerivation rec {
   name = "operon";
   src = ./.;
 
   enableShared = true;
 
+  cmakePreset = {
+    "x86_64-linux"   = "build-linux";
+    "x86_64-darwin"  = "build-linux";
+    "aarch64-darwin" = "build-osx";
+  }."${system}"; 
+
   cmakeFlags = [
-    "--preset ${if pkgs.stdenv.hostPlatform.isx86_64 then "build-linux" else "build-osx"}"
+    "--preset ${cmakePreset}"
     "-DUSE_SINGLE_PRECISION=ON"
   ];
   cmakeBuildType = "Release";
@@ -15,16 +21,13 @@ stdenv.mkDerivation {
 
   buildInputs = (with pkgs; [
     aria-csv
-    armadillo
-    blaze
     ceres-solver
     cpp-sort
     cxxopts
     doctest
     eigen
     eve
-    fast_float
-    fastor
+    fast-float
     fmt
     icu
     jemalloc
@@ -34,9 +37,8 @@ stdenv.mkDerivation {
     mdspan
     pkg-config
     pratt-parser
-    simdutf_4 # required by scnlib
+    simdutf # required by scnlib
     scnlib
-    sleef
     taskflow
     unordered_dense
     vdt
@@ -48,8 +50,6 @@ stdenv.mkDerivation {
     ned14-outcome
     ned14-quickcpplib
     ned14-status-code
-    xad
-    xsimd
     xxHash
     zstd
   ]);

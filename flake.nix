@@ -20,7 +20,7 @@
 
   outputs = inputs@{ self, flake-parts, nixpkgs, foolnotion, pratt-parser, vdt, vstat, lbfgs }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" "aarch64-darwin" ];
+      systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
       perSystem = { pkgs, system, ... }:
         let
@@ -37,7 +37,7 @@
             ];
           };
           stdenv = pkgs.llvmPackages_18.stdenv;
-          operon = import ./operon.nix { inherit stdenv pkgs; };
+          operon = import ./operon.nix { inherit stdenv pkgs system; };
         in
         rec
         {
